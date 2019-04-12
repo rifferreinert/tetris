@@ -2,7 +2,7 @@ import * as gameInfo from './store/gameInfo'
 import { configureStore } from './store'
 import drawGame from './drawGame'
 import { KEY } from './constants'
-import { fetchLocalHighScore } from './store/score'
+import { fetchLocalHighScore, getNumberOfLines } from './store/score'
 import { getDropSpeedInMS, incrementStartingLevel } from './store/level'
 import { moveDown, moveLeft, moveRight, rotate } from './store/tetromino'
 
@@ -11,6 +11,9 @@ const { dispatch } = store
 
 store.subscribe(() => {
   drawGame(store.getState())
+  if (typeof Qualtrics !== 'undefined') {
+    Qualtrics.SurveyEngine.setEmbeddedData('row_count', getNumberOfLines(store.getState()));
+  }
 })
 
 dispatch(gameInfo.resizeGame())
