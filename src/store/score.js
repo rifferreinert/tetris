@@ -32,7 +32,7 @@ export default function (state = initialState, action) {
     case ADD_GLOBAL_HIGH_SCORE:
       return {
         ...state,
-        globalHighScores: [ ...state.globalHighScores, action.highScore ]
+        globalHighScores: [...state.globalHighScores, action.highScore]
       }
     default:
       return state
@@ -44,18 +44,18 @@ export const getCurrentScore = state => state.score.currentScore
 export const getNumberOfLines = state => state.score.numberOfLines
 export const getGlobalHighScores = state => state.score.globalHighScores
 
-export function getSortedGlobalHighScores (state) {
+export function getSortedGlobalHighScores(state) {
   return getGlobalHighScores(state).sort((a, b) => b.score - a.score)
 }
 
-export function fetchLocalHighScore () {
+export function fetchLocalHighScore() {
   return dispatch => {
     const localHighScore = getLocalHighScore()
     dispatch(updateHighScore(localHighScore))
   }
 }
 
-export function calculateAndAddPoints (numberOfRowsCleared) {
+export function calculateAndAddPoints(numberOfRowsCleared) {
   return (dispatch, getState) => {
     const currentLevel = level.getCurrentLevel(getState())
     let pointsEarned = 0
@@ -66,7 +66,7 @@ export function calculateAndAddPoints (numberOfRowsCleared) {
   }
 }
 
-export function incrementLines () {
+export function incrementLines() {
   return (dispatch, getState) => {
     dispatch({ type: INCREMENT_LINES })
     if (level.canAdvanceToNextLevel(getState())) {
@@ -75,62 +75,27 @@ export function incrementLines () {
   }
 }
 
-export function addPoints (points) {
+export function addPoints(points) {
   return { type: ADD_POINTS, points }
 }
 
-export function fetchGlobalHighScores () {
-  return dispatch => {
-    dispatch({ type: CLEAR_GLOBAL_HIGH_SCORES })
-    firebase.database().ref('/highScores')
-      .orderByChild('score')
-      .limitToLast(10)
-      .on('child_added', data => {
-        dispatch({ type: ADD_GLOBAL_HIGH_SCORE, highScore: data.val() })
-      })
-  }
-}
-
-export function updateHighScores () {
-  return (dispatch, getState) => {
-    const currentScore = getCurrentScore(getState())
-    const highScore = getHighScore(getState())
-    if (currentScore > highScore) {
-      setLocalHighScore(currentScore)
-      dispatch(updateHighScore(currentScore))
-    }
-    const localName = getLocalName()
-    let name = stringValueOf(window.prompt('Enter your name:', localName))
-    name = name.trim()
-    setLocalName(name)
-    name = name === '' ? 'Anonymous' : name
-    firebase.database().ref('/highScores').push({
-      score: currentScore,
-      level: level.getCurrentLevel(getState()),
-      name
-    })
-      .then(() => dispatch(fetchGlobalHighScores()))
-      .catch(error => console.error(error))
-  }
-}
-
-function updateHighScore (score) {
+function updateHighScore(score) {
   return { type: UPDATE_HIGH_SCORE, score }
 }
 
-function getLocalHighScore () {
+function getLocalHighScore() {
   const highScore = parseInt(window.localStorage.getItem('highScore'))
   return highScore && typeof highScore === 'number' ? highScore : 0
 }
 
-function setLocalHighScore (score) {
+function setLocalHighScore(score) {
   window.localStorage.setItem('highScore', score)
 }
 
-function getLocalName () {
+function getLocalName() {
   return stringValueOf(window.localStorage.getItem('name'))
 }
 
-function setLocalName (name) {
+function setLocalName(name) {
   window.localStorage.setItem('name', name)
 }

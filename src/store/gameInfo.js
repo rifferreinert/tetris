@@ -1,5 +1,3 @@
-import { updateHighScores } from './score'
-
 export const END_GAME = 'END_GAME'
 export const START_GAME = 'START_GAME'
 const RESIZE_GAME = 'RESIZE_GAME'
@@ -16,7 +14,7 @@ const initialState = {
   spacesSoftDropped: 0
 }
 
-export default function gameInfo (state = initialState, action) {
+export default function gameInfo(state = initialState, action) {
   switch (action.type) {
     case START_GAME:
       return { ...state, started: true, gameOver: false }
@@ -42,24 +40,23 @@ export const getWidth = state => state.gameInfo.width
 export const getHeight = state => state.gameInfo.height
 export const getSpacesSoftDropped = state => state.gameInfo.spacesSoftDropped
 
-export function resizeGame () {
+export function resizeGame() {
   const width = window.innerWidth - 20 // -20 for window padding
   const height = window.innerHeight - 20
   return { type: RESIZE_GAME, width, height }
 }
 
-export function startGame () {
+export function startGame() {
   return { type: START_GAME }
 }
 
-export function endGame () {
+export function endGame() {
   return dispatch => {
-    dispatch(updateHighScores())
     dispatch({ type: END_GAME })
   }
 }
 
-export function setIsSoftDropping (isSoftDropping) {
+export function setIsSoftDropping(isSoftDropping) {
   return dispatch => {
     if (!isSoftDropping) {
       dispatch(resetSpacesSoftDropped())
@@ -68,10 +65,10 @@ export function setIsSoftDropping (isSoftDropping) {
   }
 }
 
-export function incrementSpacesSoftDropped () {
+export function incrementSpacesSoftDropped() {
   return { type: INCREMENT_SPACES_SOFT_DROPPED }
 }
 
-export function resetSpacesSoftDropped () {
+export function resetSpacesSoftDropped() {
   return { type: RESET_SPACES_SOFT_DROPPED }
 }
