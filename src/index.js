@@ -36,16 +36,22 @@ function handleKeyDown(e) {
   if (isGameStarted) {
     switch (e.keyCode) {
       case KEY.LEFT:
+        e.preventDefault();
         dispatch(moveLeft())
         break
       case KEY.RIGHT:
+        e.preventDefault();
         dispatch(moveRight())
         break
       case KEY.DOWN:
-        dispatch(moveDown())
-        dispatch(gameInfo.setIsSoftDropping(true))
+        e.preventDefault();
+        if (!boring) {
+          dispatch(moveDown())
+          dispatch(gameInfo.setIsSoftDropping(true))
+        }
         break
       case KEY.UP:
+        e.preventDefault();
         dispatch(rotate())
         break
     }
