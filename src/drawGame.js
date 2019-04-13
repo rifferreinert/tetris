@@ -6,9 +6,8 @@ import { getGrid } from './store/grid'
 import { getHeight, getWidth, isGameOver, isGameStarted } from './store/gameInfo'
 import { getNextTetromino, getTetromino } from './store/tetromino'
 
-const canvas = document.createElement('canvas')
+const canvas = document.getElementById('tetris');
 const ctx = canvas.getContext('2d')
-document.body.appendChild(canvas)
 
 document.body.style.padding = '10px'
 document.body.style.margin = '0px'
@@ -17,7 +16,7 @@ canvas.style.display = 'block'
 const { WIDTH } = BOARD
 let blockSize
 
-export default function drawGame (state) {
+export default function drawGame(state) {
   resizeCanvas(canvas, state)
   drawGrid(state)
   drawInfo(state)
@@ -28,7 +27,7 @@ export default function drawGame (state) {
   }
 }
 
-function drawStartScreen (state) {
+function drawStartScreen(state) {
   ctx.fillStyle = 'black'
   ctx.fillText('Press <space> to start', actual(1.7), actual(9.65))
   ctx.fillText('Press <i> to increase level', actual(0.95), actual(10.65))
@@ -37,7 +36,7 @@ function drawStartScreen (state) {
   }
 }
 
-function drawGrid (state) {
+function drawGrid(state) {
   getGrid(state).forEach((row, y) => {
     row.forEach((color, x) => {
       drawGridSquare(x, y, color)
@@ -45,18 +44,18 @@ function drawGrid (state) {
   })
 }
 
-function drawCurrentTetromino (state) {
+function drawCurrentTetromino(state) {
   const tetromino = getTetromino(state)
   drawTetromino(tetromino)
 }
 
-function drawTetromino (tetromino) {
+function drawTetromino(tetromino) {
   forEachBlock(tetromino, (x, y) => {
     drawGridSquare(x, y, tetromino.color)
   })
 }
 
-function drawInfo (state) {
+function drawInfo(state) {
   const highScore = score.getHighScore(state).toLocaleString()
   const currentScore = score.getCurrentScore(state).toLocaleString()
   const currentLevel = getCurrentLevel(state)
@@ -70,10 +69,7 @@ function drawInfo (state) {
   } else {
     displayedLevel = currentLevel
   }
-  drawInfoElement(`High Score: ${highScore}`, actual(1))
-  drawInfoElement(`Score: ${currentScore}`, actual(3))
   drawInfoElement(`Lines: ${score.getNumberOfLines(state)}`, actual(4))
-  drawInfoElement(`Level: ${displayedLevel}`, actual(5))
   if (isGameStarted(state)) {
     drawNextTetromino(state)
   } else {
@@ -81,7 +77,7 @@ function drawInfo (state) {
   }
 }
 
-function drawNextTetromino (state) {
+function drawNextTetromino(state) {
   const nextTetromino = getNextTetromino(state)
   drawInfoElement(`Next piece:`, actual(7))
   // special case the I piece because it's long
@@ -92,7 +88,7 @@ function drawNextTetromino (state) {
   }
 }
 
-function drawHighScores (state) {
+function drawHighScores(state) {
   const globalHighScores = score.getSortedGlobalHighScores(state)
   if (globalHighScores.length === 0) {
     return
@@ -110,17 +106,17 @@ function drawHighScores (state) {
   }
 }
 
-function drawInfoElement (text, y) {
+function drawInfoElement(text, y) {
   ctx.fillStyle = 'black'
   ctx.fillText(text, actual(WIDTH) * 1.07, y)
 }
 
-function drawGridSquare (x, y, color) {
+function drawGridSquare(x, y, color) {
   color = color || COLORS.LIGHT_GRAY
   drawSquare(actual(x), actual(y), actual(1), color)
 }
 
-function drawSquare (x, y, width, color) {
+function drawSquare(x, y, width, color) {
   ctx.beginPath()
   ctx.rect(x, y, width, width)
   ctx.fillStyle = color
@@ -131,7 +127,7 @@ function drawSquare (x, y, width, color) {
   ctx.closePath()
 }
 
-function getPixelRatio () {
+function getPixelRatio() {
   const ctx = document.createElement('canvas').getContext('2d')
   const dpr = window.devicePixelRatio || 1
   const bsr = ctx.webkitBackingStorePixelRatio ||
@@ -142,7 +138,7 @@ function getPixelRatio () {
   return dpr / bsr
 }
 
-function resizeCanvas (canvas, state) {
+function resizeCanvas(canvas, state) {
   const width = getWidth(state)
   const height = getHeight(state)
   const ratio = getPixelRatio()
@@ -155,11 +151,11 @@ function resizeCanvas (canvas, state) {
   ctx.font = `${blockSize / 2}px monospace`
 }
 
-function actual (n) {
+function actual(n) {
   return blockSize * n
 }
 
-function generateTableRows (rows) {
+function generateTableRows(rows) {
   const columnWidths = []
   rows.forEach(row => {
     row.forEach((value, i) => {
@@ -178,6 +174,6 @@ function generateTableRows (rows) {
   })
 }
 
-function rightPad (str, char, length) {
+function rightPad(str, char, length) {
   return (str.toString() + char.repeat(length)).substr(0, length)
 }
