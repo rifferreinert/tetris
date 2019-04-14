@@ -58,6 +58,7 @@ function handleKeyDown(e) {
   } else {
     switch (e.keyCode) {
       case KEY.SPACE:
+        e.preventDefault();
         dispatch(gameInfo.startGame())
         break
     }
