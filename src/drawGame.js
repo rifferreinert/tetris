@@ -30,7 +30,6 @@ export default function drawGame(state) {
 function drawStartScreen(state) {
   ctx.fillStyle = 'black'
   ctx.fillText('Press <space> to start', actual(1.7), actual(9.65))
-  ctx.fillText('Press <i> to increase level', actual(0.95), actual(10.65))
   if (isGameOver(state)) {
     ctx.fillText('Game over', actual(3.65), actual(4.65))
   }

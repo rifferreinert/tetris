@@ -60,9 +60,6 @@ function handleKeyDown(e) {
       case KEY.SPACE:
         dispatch(gameInfo.startGame())
         break
-      case KEY.I:
-        dispatch(incrementStartingLevel())
-        break
     }
   }
 }
